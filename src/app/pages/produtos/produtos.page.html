@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Produtos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-item>
+    <ion-input
+      [(ngModel)]="nome"
+      placeholder="Digite o produto">
+    </ion-input>
+  </ion-item>
+
+  <ion-button expand="block" (click)="adicionarProduto()">
+    Adicionar Produto
+  </ion-button>
+
+  <ion-list>
+    <ion-item *ngFor="let produto of produtos">
+      <ion-label>
+        {{ produto.nome }}
+      </ion-label>
+
+    <ion-button
+      slot="end"
+      (click)="editarProduto(produto)">
+      Editar
+    </ion-button>
+
+    <ion-button
+      slot="end"
+      color="danger"
+      (click)="excluirProduto(produto.id)">
+      Excluir
+    </ion-button>
+    </ion-item>
+  </ion-list>
+
+  <ion-list>
+  <ion-list-header>
+    Posts da API REST
+  </ion-list-header>
+
+  <ion-item *ngFor="let post of posts">
+    <ion-label>
+      <h2>{{ post.title }}</h2>
+      <p>{{ post.body }}</p>
+    </ion-label>
+  </ion-item>
+</ion-list>
+
+</ion-content>
