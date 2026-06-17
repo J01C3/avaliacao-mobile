@@ -2,7 +2,6 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
-
 import {
   IonContent,
   IonHeader,
@@ -12,7 +11,9 @@ import {
   IonItem,
   IonInput,
   IonList,
-  IonLabel, IonListHeader } from '@ionic/angular/standalone';
+  IonLabel,
+  IonListHeader
+} from '@ionic/angular/standalone';
 
 import { ProdutoService } from '../../services/produto';
 import { ApiService } from '../../services/api';
@@ -21,7 +22,7 @@ import { ApiService } from '../../services/api';
   selector: 'app-produtos',
   templateUrl: './produtos.page.html',
   standalone: true,
-  imports: [IonListHeader, 
+  imports: [
     CommonModule,
     FormsModule,
     IonContent,
@@ -32,7 +33,8 @@ import { ApiService } from '../../services/api';
     IonItem,
     IonInput,
     IonList,
-    IonLabel
+    IonLabel,
+    IonListHeader
   ]
 })
 export class ProdutosPage {
@@ -45,8 +47,6 @@ export class ProdutosPage {
   produtos: any[] = [];
   posts: any[] = [];
 
-  editandoId = '';
-
   constructor() {
     this.carregarProdutos();
 
@@ -56,38 +56,33 @@ export class ProdutosPage {
   }
 
   carregarProdutos() {
-    this.produtoService
-      .listar()
-      .subscribe((dados: any) => {
-        this.produtos = dados;
-      });
+    this.produtoService.listar().subscribe((dados: any) => {
+      this.produtos = dados;
+    });
   }
 
   adicionarProduto() {
-
     if (!this.nome.trim()) return;
 
-    this.produtoService.adicionar(this.nome);
-
-    this.nome = '';
+    this.produtoService.adicionar(this.nome).then(() => {
+      this.nome = '';
+      this.carregarProdutos();
+    });
   }
 
   editarProduto(produto: any) {
+    const novoNome = prompt('Digite o novo nome:', produto.nome);
 
-    const novoNome = prompt(
-      'Digite o novo nome:',
-      produto.nome
-    );
+    if (!novoNome || !novoNome.trim()) return;
 
-    if (!novoNome) return;
-
-    this.produtoService.editar(
-      produto.id,
-      novoNome
-    );
+    this.produtoService.editar(produto.id, novoNome).then(() => {
+      this.carregarProdutos();
+    });
   }
 
   excluirProduto(id: string) {
-    this.produtoService.excluir(id);
+    this.produtoService.excluir(id).then(() => {
+      this.carregarProdutos();
+    });
   }
 }
